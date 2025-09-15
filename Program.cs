@@ -1,4 +1,6 @@
 
+using UrlShortner.Features;
+
 namespace UrlShortner
 {
     public class Program
@@ -13,6 +15,13 @@ namespace UrlShortner
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+
+            var store = new Dictionary<string, string>();
+
+            builder.Services.AddSingleton(store);
+            builder.Services.AddScoped<CreateShortUrlHandler>();
+            builder.Services.AddScoped<RedirectUrlHandler>();
 
             var app = builder.Build();
 
