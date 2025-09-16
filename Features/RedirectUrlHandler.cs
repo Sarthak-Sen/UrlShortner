@@ -1,17 +1,30 @@
-﻿namespace UrlShortner.Features
+﻿using Microsoft.EntityFrameworkCore;
+using UrlShortner.Data;
+
+namespace UrlShortner.Features
 {
     public class RedirectUrlHandler
     {
-        private readonly Dictionary<string, string> _store;
+        private readonly UrlShortnerDbContext _context;
 
-        public RedirectUrlHandler(Dictionary<string, string> store)
+        public RedirectUrlHandler(UrlShortnerDbContext context)
         {
-            _store = store;
+            _context = context;
         }
 
-        public string? Handle(string shortCode)
+        public async Task<string?> Handle(string shortCode)
         {
-            return _store.TryGetValue(shortCode, out var value) ? value : null;
+            var shortUrl = await _context.ShortUrls.FirstOrDefaultAsync(x => x.ShortCode == shortCode);
+
+            if (shortUrl != null)
+            {
+                shortUrl.ClickCount++;
+                await _context.SaveChangesAsync();
+
+                return shortUrl.OriginalUrl;
+            }
+
+            return null;
         }
     }
 }
