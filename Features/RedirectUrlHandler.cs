@@ -12,16 +12,16 @@ namespace UrlShortner.Features
             _context = context;
         }
 
-        public async Task<string?> Handle(string shortCode)
+        public string? Handle(string shortCode)
         {
-            var shortUrl = await _context.ShortUrls.FirstOrDefaultAsync(x => x.ShortCode == shortCode);
+            var shortUrl = _context.ShortUrls.FirstOrDefault(x => x.short_code == shortCode);
 
             if (shortUrl != null)
             {
-                shortUrl.ClickCount++;
-                await _context.SaveChangesAsync();
+                shortUrl.click_count++;
+                _context.SaveChanges();
 
-                return shortUrl.OriginalUrl;
+                return shortUrl.original_url;
             }
 
             return null;

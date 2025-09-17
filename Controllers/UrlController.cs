@@ -19,18 +19,18 @@ namespace UrlShortner.Controllers
         }
 
         [HttpPost("createShortUrl")]
-        public async Task<IActionResult> CreateShortUrl([FromBody] string originalUrl)
+        public IActionResult CreateShortUrl([FromBody] string originalUrl)
         {
 
-            var shortCode = await _createHandler.Handle(originalUrl);
+            var shortCode = _createHandler.Handle(originalUrl);
             string shortUrl = $"{Request.Scheme}://{Request.Host}/Url/{shortCode}";
             return Ok(new { originalUrl, shortUrl });
         }
 
         [HttpGet("{shortCode}")]
-        public async Task<IActionResult> RedirectOriginal([FromRoute] string shortCode)
+        public IActionResult RedirectOriginal([FromRoute] string shortCode)
         {
-            var originalUrl = await _redirectHandler.Handle(shortCode);
+            var originalUrl = _redirectHandler.Handle(shortCode);
             if (originalUrl == null) return NotFound();
 
             return Redirect(originalUrl);

@@ -14,13 +14,13 @@ namespace UrlShortner.Features
             _context = context;
         }
 
-        public async Task<string> Handle(string originalUrl)
+        public string Handle(string originalUrl)
         {
-            var existingUrl = await _context.ShortUrls.FirstOrDefaultAsync(x => x.OriginalUrl == originalUrl);
+            var existingUrl = _context.ShortUrls.FirstOrDefault(x => x.original_url == originalUrl);
 
             if (existingUrl != null)
             {
-                return existingUrl.ShortCode; // Return existing code
+                return existingUrl.short_code; // Return existing code
             }
             string shortCode;
             bool isUnique = false;
@@ -31,7 +31,7 @@ namespace UrlShortner.Features
 
                 try
                 {
-                    isUnique = !await _context.ShortUrls.AnyAsync(x => x.ShortCode == shortCode);
+                    isUnique = !_context.ShortUrls.Any(x => x.short_code == shortCode);
                 }
                 catch (Exception)
                 {
@@ -42,15 +42,15 @@ namespace UrlShortner.Features
 
             var shortUrl = new ShortUrl
             {
-                ShortCode = shortCode,
-                OriginalUrl = originalUrl
+                short_code = shortCode,
+                original_url = originalUrl
             };
 
             _context.ShortUrls.Add(shortUrl);
 
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (Exception)
             {
