@@ -15,20 +15,13 @@ namespace UrlShortner.Data
         {
             modelBuilder.Entity<ShortUrl>(entity =>
             {
-                entity.ToTable("short_urls"); // Map to the correct table name
+                entity.ToTable("short_urls");
                 entity.HasKey(e => e.id);
                 entity.HasIndex(e => e.short_code).IsUnique();
                 entity.Property(e => e.short_code).IsRequired().HasMaxLength(10);
                 entity.Property(e => e.original_url).IsRequired();
                 entity.Property(e => e.created_at).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.Property(e => e.click_count).HasDefaultValue(0);
-
-                //// Map property names to column names
-                //entity.Property(e => e.Id).HasColumnName("id");
-                //entity.Property(e => e.ShortCode).HasColumnName("short_code");
-                //entity.Property(e => e.OriginalUrl).HasColumnName("original_url");
-                //entity.Property(e => e.CreatedAt).HasColumnName("created_at");
-                //entity.Property(e => e.ClickCount).HasColumnName("click_count");
             });
         }
     }

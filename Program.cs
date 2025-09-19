@@ -18,9 +18,13 @@ namespace UrlShortner
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Get connection string from environment variable or fallback to appsettings
+            var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
+                ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
             //Db Context
             builder.Services.AddDbContext<UrlShortnerDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), npgsqlOptions =>
+                options.UseNpgsql(connectionString, npgsqlOptions =>
                 {
                     npgsqlOptions.CommandTimeout(30); // 2 minutes timeout
                 }));

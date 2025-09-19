@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UrlShortner.Data;
+﻿using UrlShortner.Data;
 
 namespace UrlShortner.Features
 {
