@@ -18,8 +18,8 @@ namespace UrlShortner.Controllers
             _redirectHandler = redirectHandler;
         }
 
-        [HttpPost("createShortUrl")]
-        public IActionResult CreateShortUrl([FromBody] string originalUrl)
+        [HttpPost("CreateShortUrl/{originalUrl}")]
+        public IActionResult CreateShortUrl([FromRoute] string originalUrl)
         {
 
             var shortCode = _createHandler.Handle(originalUrl);
